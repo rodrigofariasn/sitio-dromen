@@ -135,6 +135,12 @@
       _captcha: 'false'
     };
 
+    // FormSubmit rechaza envíos desde páginas abiertas como archivo local (file://).
+    if (location.protocol === 'file:') {
+      showStatus('err', 'El formulario solo funciona con el sitio publicado en un servidor web (http/https), no abriendo el archivo HTML directamente.');
+      return;
+    }
+
     btn.disabled = true;
     btn.textContent = 'Enviando…';
 
@@ -143,16 +149,25 @@
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(data)
     })
-      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+      .then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, body: j }; });
+      })
       .then(function (res) {
         if (res.ok && String(res.body.success) === 'true') {
           form.reset();
           showStatus('ok', '¡Gracias! Recibimos tu consulta y te contactaremos a la brevedad.');
+          return;
+        }
+        var msg = (res.body && res.body.message) || '';
+        console.warn('FormSubmit:', msg || res);
+        if (/activat/i.test(msg)) {
+          showStatus('err', 'El formulario aún no está activado. Revisa la bandeja de rodrigo.farias@dromen.cl y confirma el enlace "Activate Form" enviado por FormSubmit.');
         } else {
-          throw new Error(res.body && res.body.message);
+          showStatus('err', 'No pudimos enviar tu consulta' + (msg ? ' (' + msg + ')' : '') + '. Inténtalo nuevamente o escríbenos a consulta@dromen.cl.');
         }
       })
-      .catch(function () {
+      .catch(function (err) {
+        console.warn('FormSubmit:', err);
         showStatus('err', 'No pudimos enviar tu consulta. Inténtalo nuevamente o escríbenos a consulta@dromen.cl.');
       })
       .then(function () {
