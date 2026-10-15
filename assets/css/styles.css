@@ -64,10 +64,16 @@ p { margin: 0 0 1em; }
 /* ---------- Header ---------- */
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(255, 255, 255, .92);
-  backdrop-filter: saturate(160%) blur(12px);
   border-bottom: 1px solid transparent;
   transition: border-color .3s, box-shadow .3s;
+}
+/* El desenfoque va en un pseudo-elemento: backdrop-filter en el header convertiría
+   al header en contenedor del menú móvil (position: fixed) y lo recortaría. */
+.site-header::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: rgba(255, 255, 255, .92);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  backdrop-filter: saturate(160%) blur(12px);
 }
 .site-header.scrolled { border-color: var(--border); box-shadow: 0 6px 20px -16px rgba(15, 23, 42, .4); }
 .header-inner { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
@@ -341,11 +347,13 @@ section { padding: 100px 0; }
   :root { --header-h: 68px; }
   .nav-toggle { display: inline-flex; }
   .main-nav {
-    position: fixed; top: var(--header-h); left: 0; right: 0; bottom: 0;
-    background: #fff; padding: 24px; transform: translateX(-100%); transition: transform .3s ease; overflow-y: auto;
+    position: fixed; top: var(--header-h); left: 0; right: 0;
+    height: calc(100vh - var(--header-h)); height: calc(100dvh - var(--header-h));
+    background: #fff; padding: 24px; transform: translateX(-100%); visibility: hidden;
+    transition: transform .3s ease, visibility 0s linear .3s; overflow-y: auto;
     border-top: 1px solid var(--border);
   }
-  .main-nav.open { transform: none; }
+  .main-nav.open { transform: none; visibility: visible; transition: transform .3s ease; }
   .main-nav ul { flex-direction: column; gap: 4px; }
   .main-nav a { font-size: 1.1rem; padding: 14px 12px; border-bottom: 1px solid var(--border); border-radius: 0; }
   .main-nav a::after { display: none; }
