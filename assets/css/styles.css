@@ -95,7 +95,7 @@ p { margin: 0 0 1em; }
 .main-nav .nav-cta:hover { background: var(--primary-dark); color: #fff; }
 
 .logo { display: flex; align-items: center; margin-left: auto; }
-.logo img { height: 34px; width: auto; }
+.logo img { height: 51px; width: auto; }
 
 .nav-toggle {
   display: none; width: 44px; height: 44px; border: 1px solid var(--border); border-radius: 10px;
@@ -372,7 +372,7 @@ section { padding: 100px 0; }
 
 @media (max-width: 640px) {
   .container { padding: 0 16px; }
-  .logo img { height: 28px; }
+  .logo img { height: 42px; }
   .pillars-grid { grid-template-columns: 1fr; }
   .pillar { border-right: 0 !important; border-bottom: 1px solid var(--border); }
   .pillar:last-child { border-bottom: 0; }
