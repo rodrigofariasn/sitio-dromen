@@ -1,0 +1,13 @@
+/* DROMEN — botón flotante de WhatsApp (se ubica sobre el botón "volver arriba") */
+.wa-float {
+  position: fixed; right: 18px; bottom: 78px; width: 52px; height: 52px; border-radius: 50%;
+  background: #25D366; color: #fff; display: grid; place-items: center;
+  box-shadow: 0 10px 24px -10px rgba(37, 211, 102, .9); transition: transform .3s, background .3s; z-index: 89;
+}
+.wa-float:hover { background: #1EBE5A; transform: translateY(-3px); }
+.wa-float:focus-visible { outline: 3px solid #128C7E; outline-offset: 3px; }
+.wa-float svg { width: 28px; height: 28px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-float { transition: none; }
+}
