@@ -1,7 +1,16 @@
 name: Publicar en freehost.cl
+# Un push a main solo hace una prueba (dry-run): se conecta y lista cambios, sin subir nada.
+# Para reemplazar archivos en el hosting: Actions > Run workflow > modo "publicar".
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      modo:
+        description: "prueba = no sube nada; publicar = reemplaza archivos en el hosting"
+        type: choice
+        options: [prueba, publicar]
+        default: prueba
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -12,7 +21,8 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: public_html/
+          server-dir: ./
+          dry-run: ${{ inputs.modo != 'publicar' }}
           exclude: |
             **/.git*
             **/.git*/**
