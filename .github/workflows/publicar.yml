@@ -1,7 +1,10 @@
 name: Publicar en freehost.cl
-# Solo manual (Actions > Publicar en freehost.cl > Run workflow).
+# Se ejecuta al subir una etiqueta "publicar-*" (desde Claude, con autorización del usuario)
+# o manualmente (Actions > Publicar en freehost.cl > Run workflow).
 # Sube los cambios a /home/dromencl/public_html y reemplaza los archivos con el mismo nombre.
 on:
+  push:
+    tags: ['publicar-*']
   workflow_dispatch:
 jobs:
   publicar:
